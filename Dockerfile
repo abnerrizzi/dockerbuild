@@ -1,4 +1,6 @@
 FROM jboss/base-jdk:7
+#FROM ubuntu:14.04
+#FROM openjdk:7u91-jre-alpine
 
 ENV JBOSS_HOME /opt/jboss
 ENV JBOSS_VERSION 7.1.1.Final
@@ -10,11 +12,11 @@ USER root
 ADD $JBOSS_URL $HOME
 RUN mv jboss-as-${JBOSS_VERSION}.zip $HOME \
     && cd $HOME \
-    && unzip jboss-as-$JBOSS_VERSION.zip \
-    && mv $HOME/jboss-as-$JBOSS_VERSION /opt
+    && unzip jboss-as-$JBOSS_VERSION.zip
 
-RUN rm $HOME/jboss-as-$JBOSS_VERSION.zip \
-    && ln -s /opt/jboss-as-$JBOSS_VERSION $JBOSS_HOME \
+RUN mv $HOME/jboss-as-$JBOSS_VERSION/* $JBOSS_HOME
+
+RUN rm -rf $HOME/jboss-as-${JBOSS_VERSION}* \
     && chown -R jboss:0 ${JBOSS_HOME} \
     && chmod -R g+rw ${JBOSS_HOME} \
     && ls -al /opt
@@ -25,9 +27,11 @@ ENV LAUNCH_JBOSS_IN_BACKGROUND true
 USER jboss
 
 # Expose the ports in which we're interested
-EXPOSE 8080
+EXPOSE 8080 9990
+
+RUN curl -L -o ${JBOSS_HOME}/jboss-modules.jar https://repo1.maven.org/maven2/org/jboss/modules/jboss-modules/1.1.5.GA/jboss-modules-1.1.5.GA.jar
 
 # Set the default command to run on boot
 # This will boot WildFly in standalone mode and bind to all interfaces
-CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0"]
+CMD ["/opt/jboss/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0"]
 
