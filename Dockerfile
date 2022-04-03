@@ -12,7 +12,7 @@ USER root
 ADD $JBOSS_URL $HOME
 RUN mv jboss-as-${JBOSS_VERSION}.zip $HOME \
     && cd $HOME \
-    && unzip jboss-as-$JBOSS_VERSION.zip
+    && unzip -q jboss-as-$JBOSS_VERSION.zip
 
 RUN mv $HOME/jboss-as-$JBOSS_VERSION/* $JBOSS_HOME
 
