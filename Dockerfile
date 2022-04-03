@@ -25,11 +25,14 @@ RUN rm -rf $HOME/jboss-as-${JBOSS_VERSION}* \
 ENV LAUNCH_JBOSS_IN_BACKGROUND true
 
 USER jboss
-
-# Expose the ports in which we're interested
 EXPOSE 8080 9990
 
 RUN curl -L -o ${JBOSS_HOME}/jboss-modules.jar https://repo1.maven.org/maven2/org/jboss/modules/jboss-modules/1.1.5.GA/jboss-modules-1.1.5.GA.jar
+COPY cache/jboss-modules.sh /tmp/jboss-modules.sh
+RUN /tmp/jboss-modules.sh
+
+COPY cache/standalone-prod.xml $JBOSS_HOME/standalone/configuration/standalone.xml
+RUN /opt/jboss/bin/add-user.sh --silent=true admin admin123
 
 # Set the default command to run on boot
 # This will boot WildFly in standalone mode and bind to all interfaces
