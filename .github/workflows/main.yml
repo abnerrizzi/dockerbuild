@@ -17,7 +17,7 @@ jobs:
         with:
           registry: registry.gitlab.com
           username: ${{ secrets.GL_USER }}
-          token: ${{ secrets.GL_TOKEN }}
+          password: ${{ secrets.GL_TOKEN }}
 
       -
         name: Build and push
