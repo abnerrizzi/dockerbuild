@@ -18,10 +18,10 @@ jobs:
           registry: registry.gitlab.com
           username: ${{ secrets.GITLAB_USERNAME }}
           password: ${{ secrets.GITLAB_PASSWORD }}
-      
+
       -
         name: Build and push
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: user/app:latest
+          tags: registry.gitlab.com/abnerrizzi/my-scripts:latest
