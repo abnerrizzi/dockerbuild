@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: maven:
+    runs-on: maven:3-jdk-8
 
     steps:
     - uses: actions/checkout@v2
