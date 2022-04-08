@@ -1,0 +1,30 @@
+name: Try cache
+
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: maven:3-jdk-8
+    container:
+      image: maven:3-jdk-8
+
+    steps:
+    - uses: actions/checkout@v2
+    -
+      name: Set up JDK 8 and Maven
+      uses: actions/setup-java@v2
+      with:
+        distribution: zulu
+        java-version: 8.0.312
+    -
+      name: Cache Maven packages
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2-
+    -
+      name: Build with Maven
+      run: mvn -f io.github.lorenzobettini.example/pom.xml verify
