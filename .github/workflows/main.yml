@@ -1,5 +1,7 @@
 name: Try cache
 
+runs-on: self-hosted
+
 on:
   push:
 
